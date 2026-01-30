@@ -10,7 +10,7 @@ export function ClubCard({ club, onVote, disabled }) {
       disabled={disabled}
       className={`
         w-full p-4 sm:p-6 bg-white rounded-xl shadow-lg border-2 border-transparent
-        transition-all duration-200 text-center
+        transition-all duration-200 text-center min-h-[280px] sm:min-h-0
         ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:border-berkeley-gold hover:shadow-xl hover:-translate-y-1 cursor-pointer'}
       `}
     >
@@ -31,7 +31,7 @@ export function ClubCard({ club, onVote, disabled }) {
 
         <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-2 leading-tight line-clamp-2">{club.name}</h3>
 
-        <p className="text-gray-500 text-[9px] sm:text-sm flex-1 line-clamp-3 sm:line-clamp-3 leading-tight">
+        <p className="text-gray-500 text-xs sm:text-sm flex-1 line-clamp-4 sm:line-clamp-3 leading-normal">
           {club.description || 'No description available.'}
         </p>
 
