@@ -39,13 +39,13 @@ DECLARE
   v_k_factor INTEGER := 32;
   v_recent_votes INTEGER;
 BEGIN
-  -- Rate limiting: max 100 votes per session per hour
+  -- Rate limiting: max 1000 votes per session per hour
   SELECT COUNT(*) INTO v_recent_votes
   FROM matchups
   WHERE session_id = p_session_id
     AND created_at > NOW() - INTERVAL '1 hour';
 
-  IF v_recent_votes >= 100 THEN
+  IF v_recent_votes >= 1000 THEN
     RETURN json_build_object(
       'success', false,
       'error', 'rate_limit_exceeded',

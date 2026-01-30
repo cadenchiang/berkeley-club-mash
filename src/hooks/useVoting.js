@@ -5,7 +5,7 @@ import { useSession } from './useSession';
 /**
  * Hook for managing the voting system.
  * Uses server-side ELO calculation for security.
- * Rate limited to 100 votes per hour per session.
+ * Rate limited to 1000 votes per hour per session.
  * @returns {{ clubs: array, loading: boolean, error: string, todayVotes: number, lastVoteResult: object, vote: function, skip: function }}
  */
 export function useVoting() {

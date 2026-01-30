@@ -27,7 +27,7 @@ export function VoteArena() {
   return (
     <div className="max-w-4xl w-full px-2 sm:px-4 flex flex-col items-center">
       <div className="text-center mb-2 sm:mb-8">
-        <h1 className="text-lg sm:text-3xl font-bold text-gray-900">
+        <h1 className="text-xl sm:text-3xl font-bold text-gray-900">
           which club is better?
         </h1>
       </div>
@@ -49,7 +49,7 @@ export function VoteArena() {
             ))}
           </div>
 
-          <div className="flex flex-col items-center gap-2 sm:gap-4 mt-6 sm:mt-8">
+          <div className="flex flex-col items-center gap-2 sm:gap-4 mt-16 sm:mt-8">
             <div className="flex gap-2 sm:gap-4">
               <button
                 onClick={skip}
