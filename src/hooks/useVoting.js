@@ -8,6 +8,8 @@ import { useSession } from './useSession';
  * Rate limited to 1000 votes per hour per session.
  * @returns {{ clubs: array, loading: boolean, error: string, todayVotes: number, lastVoteResult: object, vote: function, skip: function }}
  */
+const MATCHUP_KEY = 'clubmash_current_matchup';
+
 export function useVoting() {
   const [clubs, setClubs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,9 +18,27 @@ export function useVoting() {
   const [lastVoteResult, setLastVoteResult] = useState(null);
   const { sessionId, fingerprint } = useSession();
 
-  const fetchRandomPair = useCallback(async () => {
+  const fetchRandomPair = useCallback(async (forceNew = false) => {
     setLoading(true);
     setError(null);
+
+    // Check for stored matchup (prevents refresh abuse)
+    if (!forceNew) {
+      try {
+        const stored = localStorage.getItem(MATCHUP_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          // Check if matchup is less than 24 hours old
+          if (parsed.timestamp && Date.now() - parsed.timestamp < 86400000) {
+            setClubs(parsed.clubs);
+            setLoading(false);
+            return;
+          }
+        }
+      } catch (e) {
+        // Ignore parse errors
+      }
+    }
 
     try {
       const { data, error: fetchError } = await supabase.rpc('get_random_pair');
@@ -29,6 +49,12 @@ export function useVoting() {
         setError('Not enough clubs to compare. Please add more clubs.');
         return;
       }
+
+      // Store the matchup to prevent refresh abuse
+      localStorage.setItem(MATCHUP_KEY, JSON.stringify({
+        clubs: data,
+        timestamp: Date.now()
+      }));
 
       setClubs(data);
     } catch (err) {
@@ -88,7 +114,9 @@ export function useVoting() {
 
       setLastVoteResult(data);
       setTodayVotes((prev) => prev + 1);
-      await fetchRandomPair();
+      // Clear stored matchup and get new one
+      localStorage.removeItem(MATCHUP_KEY);
+      await fetchRandomPair(true);
     } catch (err) {
       console.error('Error recording vote:', err);
       setError('Failed to record vote. Please try again.');
