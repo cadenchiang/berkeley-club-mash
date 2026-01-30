@@ -9,7 +9,7 @@ import { useVoting } from '../../hooks/useVoting';
  * Displays two clubs side by side for comparison voting.
  */
 export function VoteArena() {
-  const { clubs, loading, error, todayVotes, lastVoteResult, vote, skip } = useVoting();
+  const { clubs, loading, error, totalWins, lastVoteResult, vote, skip } = useVoting();
   const [voteResult, setVoteResult] = useState(null);
   const [showingResult, setShowingResult] = useState(false);
 
@@ -126,7 +126,7 @@ export function VoteArena() {
               rankings
             </Link>
 
-            <VoteCounter count={todayVotes} />
+            <VoteCounter count={totalWins} />
           </div>
         )}
       </div>
