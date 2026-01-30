@@ -9,7 +9,7 @@ import { CommentList } from '../components/comments/CommentList';
  */
 export function ClubPage() {
   const { id } = useParams();
-  const { club, loading, error } = useClub(id);
+  const { club, loading, error, refetch } = useClub(id);
 
   const categoryColors = {
     tech: 'bg-blue-100 text-blue-800',
@@ -83,6 +83,15 @@ export function ClubPage() {
               `}>
                 {club.category}
               </span>
+              <button
+                onClick={refetch}
+                className="p-1 text-gray-400 hover:text-berkeley-blue transition-colors"
+                title="Refresh stats"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              </button>
             </div>
 
             <p className="text-gray-600 text-xs sm:text-base mb-2 sm:mb-4">

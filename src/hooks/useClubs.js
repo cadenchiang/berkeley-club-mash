@@ -56,43 +56,43 @@ export function useClubs({ category = '', search = '' } = {}) {
 /**
  * Hook for fetching a single club by ID.
  * @param {string} clubId - The club's UUID.
- * @returns {{ club: object, loading: boolean, error: string }}
+ * @returns {{ club: object, loading: boolean, error: string, refetch: function }}
  */
 export function useClub(clubId) {
   const [club, setClub] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  const fetchClub = useCallback(async () => {
     if (!clubId) {
       setLoading(false);
       return;
     }
 
-    const fetchClub = async () => {
-      setLoading(true);
-      setError(null);
+    setLoading(true);
+    setError(null);
 
-      try {
-        const { data, error: fetchError } = await supabase
-          .from('clubs')
-          .select('*')
-          .eq('id', clubId)
-          .single();
+    try {
+      const { data, error: fetchError } = await supabase
+        .from('clubs')
+        .select('*')
+        .eq('id', clubId)
+        .single();
 
-        if (fetchError) throw fetchError;
+      if (fetchError) throw fetchError;
 
-        setClub(data);
-      } catch (err) {
-        console.error('Error fetching club:', err);
-        setError('Failed to load club. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchClub();
+      setClub(data);
+    } catch (err) {
+      console.error('Error fetching club:', err);
+      setError('Failed to load club. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   }, [clubId]);
 
-  return { club, loading, error };
+  useEffect(() => {
+    fetchClub();
+  }, [fetchClub]);
+
+  return { club, loading, error, refetch: fetchClub };
 }
