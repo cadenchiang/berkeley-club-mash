@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { CommentForm } from './CommentForm';
 import { CommentItem } from './CommentItem';
 import { useComments } from '../../hooks/useComments';
@@ -18,6 +19,30 @@ export function CommentList({ clubId }) {
     reportComment,
   } = useComments(clubId);
 
+  // Organize comments into parent comments and replies
+  const { parentComments, repliesByParent } = useMemo(() => {
+    const parents = [];
+    const replies = {};
+
+    comments.forEach((comment) => {
+      if (comment.parent_id) {
+        if (!replies[comment.parent_id]) {
+          replies[comment.parent_id] = [];
+        }
+        replies[comment.parent_id].push(comment);
+      } else {
+        parents.push(comment);
+      }
+    });
+
+    // Sort replies by date (oldest first for threaded view)
+    Object.keys(replies).forEach((parentId) => {
+      replies[parentId].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    });
+
+    return { parentComments: parents, repliesByParent: replies };
+  }, [comments]);
+
   return (
     <div>
       <div className="flex items-center gap-2 mb-3">
@@ -36,19 +61,22 @@ export function CommentList({ clubId }) {
         </div>
       ) : error ? (
         <p className="text-red-500 text-sm py-3">{error}</p>
-      ) : comments.length === 0 ? (
+      ) : parentComments.length === 0 ? (
         <p className="text-gray-400 text-sm py-6">
           no comments yet
         </p>
       ) : (
         <div className="space-y-3">
-          {comments.map((comment) => (
+          {parentComments.map((comment) => (
             <CommentItem
               key={comment.id}
               comment={comment}
               userVote={userVotes[comment.id]}
               onVote={voteComment}
               onReport={reportComment}
+              onReply={addComment}
+              replies={repliesByParent[comment.id] || []}
+              userVotes={userVotes}
             />
           ))}
         </div>

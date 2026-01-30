@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { ReportModal } from './ReportModal';
+import { CommentForm } from './CommentForm';
 
 /**
  * Single comment item component.
- * Displays comment with voting and report options.
- * @param {{ comment: object, userVote: string, onVote: function, onReport: function }} props
+ * Displays comment with voting, reply, and report options.
+ * @param {{ comment: object, userVote: string, onVote: function, onReport: function, onReply: function, replies: array, userVotes: object, isReply: boolean }} props
  */
-export function CommentItem({ comment, userVote, onVote, onReport }) {
+export function CommentItem({ comment, userVote, onVote, onReport, onReply, replies = [], userVotes = {}, isReply = false }) {
   const [showReportModal, setShowReportModal] = useState(false);
+  const [showReplyForm, setShowReplyForm] = useState(false);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -19,8 +21,8 @@ export function CommentItem({ comment, userVote, onVote, onReport }) {
   };
 
   return (
-    <div className="bg-white rounded-lg p-4 border border-gray-200">
-      <p className="text-gray-800 mb-3">{comment.content}</p>
+    <div className={`bg-white rounded-lg p-4 border border-gray-200 ${isReply ? 'ml-6 border-l-2 border-l-gray-300' : ''}`}>
+      <p className={`text-gray-800 mb-3 ${isReply ? 'text-sm' : ''}`}>{comment.content}</p>
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -62,15 +64,49 @@ export function CommentItem({ comment, userVote, onVote, onReport }) {
           <span className="text-sm text-gray-400">
             {formatDate(comment.created_at)}
           </span>
+
+          {!isReply && (
+            <button
+              onClick={() => setShowReplyForm(!showReplyForm)}
+              className="text-sm text-gray-400 hover:text-berkeley-blue transition-colors"
+            >
+              reply
+            </button>
+          )}
         </div>
 
         <button
           onClick={() => setShowReportModal(true)}
           className="text-sm text-gray-400 hover:text-red-600 transition-colors"
         >
-          Report
+          report
         </button>
       </div>
+
+      {showReplyForm && (
+        <CommentForm
+          onSubmit={onReply}
+          parentId={comment.id}
+          onCancel={() => setShowReplyForm(false)}
+          isReply
+        />
+      )}
+
+      {replies.length > 0 && (
+        <div className="mt-3 space-y-2">
+          {replies.map((reply) => (
+            <CommentItem
+              key={reply.id}
+              comment={reply}
+              userVote={userVotes[reply.id]}
+              onVote={onVote}
+              onReport={onReport}
+              onReply={onReply}
+              isReply
+            />
+          ))}
+        </div>
+      )}
 
       <ReportModal
         isOpen={showReportModal}

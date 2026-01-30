@@ -58,7 +58,7 @@ export function useComments(clubId) {
     fetchComments();
   }, [fetchComments]);
 
-  const addComment = useCallback(async (content) => {
+  const addComment = useCallback(async (content, parentId = null) => {
     if (!clubId || !content.trim()) return;
 
     try {
@@ -67,6 +67,7 @@ export function useComments(clubId) {
         .insert({
           club_id: clubId,
           content: content.trim(),
+          parent_id: parentId,
         });
 
       if (insertError) throw insertError;
