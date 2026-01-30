@@ -29,7 +29,7 @@ export function ClubCard({ club, onVote, disabled }) {
           </div>
         )}
 
-        <h3 className="text-sm sm:text-xl font-bold text-gray-900 mb-0.5 sm:mb-2 leading-tight line-clamp-2">{club.name}</h3>
+        <h3 className="text-sm sm:text-xl font-bold text-gray-900 mb-2 sm:mb-2 leading-tight line-clamp-2">{club.name}</h3>
 
         <p className="text-gray-500 text-[9px] sm:text-sm flex-1 line-clamp-3 sm:line-clamp-3 leading-tight">
           {club.description || 'No description available.'}
