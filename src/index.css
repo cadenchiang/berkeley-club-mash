@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@theme {
+  /* Berkeley Colors */
+  --color-berkeley-blue: #003262;
+  --color-berkeley-gold: #FDB515;
+  --color-berkeley-blue-light: #3B7EA1;
+  --color-berkeley-gold-light: #FEC143;
+}
+
+/* Base styles */
+body {
+  @apply bg-gray-50 text-gray-900 min-h-screen;
+}
