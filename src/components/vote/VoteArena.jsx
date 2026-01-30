@@ -25,20 +25,20 @@ export function VoteArena() {
   }
 
   return (
-    <div className="max-w-4xl w-full px-3 sm:px-4 flex flex-col items-center">
-      <div className="text-center mb-4 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-          Which club is better?
+    <div className="max-w-4xl w-full px-2 sm:px-4 flex flex-col items-center">
+      <div className="text-center mb-2 sm:mb-8">
+        <h1 className="text-lg sm:text-3xl font-bold text-gray-900">
+          which club is better?
         </h1>
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-berkeley-blue border-t-transparent"></div>
+        <div className="flex justify-center items-center py-10">
+          <div className="animate-spin rounded-full h-8 w-8 border-4 border-berkeley-blue border-t-transparent"></div>
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-3 sm:gap-6 mb-4 sm:mb-8 w-full">
+          <div className="grid grid-cols-2 gap-2 sm:gap-6 mb-2 sm:mb-8 w-full">
             {clubs.map((club) => (
               <ClubCard
                 key={club.id}
@@ -49,20 +49,20 @@ export function VoteArena() {
             ))}
           </div>
 
-          <div className="flex flex-col items-center gap-3 sm:gap-4">
-            <div className="flex gap-3 sm:gap-4">
+          <div className="flex flex-col items-center gap-2 sm:gap-4">
+            <div className="flex gap-2 sm:gap-4">
               <button
                 onClick={skip}
                 disabled={loading}
-                className="px-4 sm:px-6 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-50 text-sm sm:text-base"
+                className="px-3 sm:px-6 py-1.5 sm:py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-50 text-xs sm:text-base"
               >
-                Skip
+                skip
               </button>
               <Link
                 to="/rankings"
-                className="px-4 sm:px-6 py-2 bg-berkeley-gold text-berkeley-blue font-semibold rounded-lg hover:bg-berkeley-gold-light transition-colors text-sm sm:text-base"
+                className="px-3 sm:px-6 py-1.5 sm:py-2 bg-berkeley-gold text-berkeley-blue font-semibold rounded-lg hover:bg-berkeley-gold-light transition-colors text-xs sm:text-base"
               >
-                See Rankings
+                rankings
               </Link>
             </div>
 
