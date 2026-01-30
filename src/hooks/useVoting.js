@@ -117,7 +117,7 @@ export function useVoting() {
           setError(data.message || 'Failed to record vote.');
         }
         setLoading(false);
-        return;
+        return null;
       }
 
       setLastVoteResult(data);
@@ -125,10 +125,12 @@ export function useVoting() {
       // Clear stored matchup and get new one
       localStorage.removeItem(MATCHUP_KEY);
       await fetchRandomPair(true);
+      return data;
     } catch (err) {
       console.error('Error recording vote:', err);
       setError('Failed to record vote. Please try again.');
       setLoading(false);
+      return null;
     }
   }, [sessionId, fingerprint, clubs, fetchRandomPair]);
 
