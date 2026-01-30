@@ -40,7 +40,7 @@ export function Leaderboard({ clubs, loading }) {
             <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold">Club</th>
             <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold hidden sm:table-cell">Category</th>
             <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold">ELO</th>
-            <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold hidden sm:table-cell">Votes</th>
+            <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold">Votes</th>
             <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold hidden md:table-cell">Win Rate</th>
           </tr>
         </thead>
@@ -101,8 +101,8 @@ export function Leaderboard({ clubs, loading }) {
                 <td className="px-2 sm:px-4 py-3 sm:py-4 text-right">
                   <span className="font-bold text-berkeley-blue text-sm sm:text-base">{club.elo_rating}</span>
                 </td>
-                <td className="px-2 sm:px-4 py-3 sm:py-4 text-right hidden sm:table-cell">
-                  <span className="text-gray-600 text-sm sm:text-base">{club.total_votes}</span>
+                <td className="px-2 sm:px-4 py-3 sm:py-4 text-right">
+                  <span className="text-gray-600 text-xs sm:text-base">{club.total_votes}</span>
                 </td>
                 <td className="px-2 sm:px-4 py-3 sm:py-4 text-right hidden md:table-cell">
                   <span className="text-gray-600">{winRate}</span>
