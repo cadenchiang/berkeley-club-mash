@@ -49,7 +49,7 @@ export function VoteArena() {
             ))}
           </div>
 
-          <div className="flex flex-col items-center gap-2 sm:gap-4 mt-auto sm:mt-8 pb-2">
+          <div className="flex flex-col items-center gap-2 sm:gap-4 mt-auto pb-2">
             <div className="flex gap-2 sm:gap-4">
               <button
                 onClick={skip}
