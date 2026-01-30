@@ -108,7 +108,7 @@ export function Leaderboard({ clubs, loading }) {
                   <span className="font-bold text-berkeley-blue text-sm sm:text-base">{club.elo_rating}</span>
                 </td>
                 <td className="px-2 sm:px-4 py-3 sm:py-4 text-right">
-                  <span className="text-gray-600 text-xs sm:text-base">{club.wins}</span>
+                  <span className="text-gray-600 text-xs sm:text-base">{club.total_votes}</span>
                 </td>
                 <td className="px-2 sm:px-4 py-3 sm:py-4 text-right hidden md:table-cell">
                   <span className="text-gray-600">{winRate}</span>
