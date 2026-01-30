@@ -61,8 +61,11 @@ export function ClubPage() {
             <img
               src={club.image_url}
               alt={club.name}
+              width={96}
+              height={96}
               loading="eager"
-              decoding="async"
+              decoding="sync"
+              fetchpriority="high"
               className="w-16 h-16 sm:w-24 sm:h-24 rounded-xl object-contain bg-gray-100 p-2"
             />
           ) : (

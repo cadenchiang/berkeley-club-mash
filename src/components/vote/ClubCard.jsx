@@ -19,8 +19,11 @@ export function ClubCard({ club, onVote, disabled }) {
           <img
             src={club.image_url}
             alt={club.name}
+            width={176}
+            height={176}
             loading="eager"
-            decoding="async"
+            decoding="sync"
+            fetchpriority="high"
             className="w-28 h-28 sm:w-44 sm:h-44 rounded-xl object-contain mb-3 sm:mb-4 bg-gray-100 p-2"
           />
         ) : (

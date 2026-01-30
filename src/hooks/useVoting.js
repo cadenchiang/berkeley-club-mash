@@ -56,6 +56,14 @@ export function useVoting() {
         timestamp: Date.now()
       }));
 
+      // Preload images for instant rendering
+      data.forEach((club) => {
+        if (club.image_url) {
+          const img = new Image();
+          img.src = club.image_url;
+        }
+      });
+
       setClubs(data);
     } catch (err) {
       console.error('Error fetching clubs:', err);

@@ -24,6 +24,14 @@ export function useClubs({ category = '', search = '' } = {}) {
 
       if (fetchError) throw fetchError;
 
+      // Preload first 15 club images for instant rendering
+      (data || []).slice(0, 15).forEach((club) => {
+        if (club.image_url) {
+          const img = new Image();
+          img.src = club.image_url;
+        }
+      });
+
       setClubs(data || []);
     } catch (err) {
       console.error('Error fetching clubs:', err);

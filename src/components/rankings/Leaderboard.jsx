@@ -76,8 +76,11 @@ export function Leaderboard({ clubs, loading }) {
                       <img
                         src={club.image_url}
                         alt={club.name}
-                        loading="lazy"
-                        decoding="async"
+                        width={40}
+                        height={40}
+                        loading={index < 15 ? "eager" : "lazy"}
+                        decoding={index < 15 ? "sync" : "async"}
+                        fetchpriority={index < 5 ? "high" : "auto"}
                         className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg object-contain flex-shrink-0 bg-gray-100 p-1"
                       />
                     ) : (
