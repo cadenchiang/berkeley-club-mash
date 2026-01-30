@@ -13,7 +13,7 @@ export function Rankings() {
   const { clubs, loading, error } = useClubs({ category, search });
 
   return (
-    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-8 h-full overflow-auto">
       <div className="mb-4 sm:mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">Club Rankings</h1>
         <p className="text-gray-600 text-sm sm:text-base">
