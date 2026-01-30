@@ -12,7 +12,7 @@ export function ClubStats({ club }) {
     <div className="grid grid-cols-3 gap-2 sm:gap-4">
       <div className="bg-gray-50 rounded-lg p-2 sm:p-4 text-center">
         <div className="text-lg sm:text-3xl font-bold text-berkeley-blue">{club.elo_rating}</div>
-        <div className="text-[10px] sm:text-sm text-gray-500">elo</div>
+        <div className="text-[10px] sm:text-sm text-gray-500">🏆</div>
       </div>
       <div className="bg-gray-50 rounded-lg p-2 sm:p-4 text-center">
         <div className="text-lg sm:text-3xl font-bold text-green-600">{winRate}</div>
