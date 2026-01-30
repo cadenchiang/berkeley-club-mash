@@ -25,20 +25,22 @@ export function VoteArena() {
   }
 
   return (
-    <div className="max-w-4xl w-full h-full px-2 sm:px-4 flex flex-col items-center">
-      <div className="text-center mb-2 sm:mb-8">
-        <h1 className="text-xl sm:text-3xl font-bold text-gray-900">
-          which club is better?
-        </h1>
-      </div>
+    <div className="max-w-4xl w-full h-full px-2 sm:px-4 flex flex-col items-center justify-between py-4">
+      <div className="flex-1" />
 
-      {loading ? (
-        <div className="flex justify-center items-center py-10">
-          <div className="animate-spin rounded-full h-8 w-8 border-4 border-berkeley-blue border-t-transparent"></div>
+      <div className="flex flex-col items-center">
+        <div className="text-center mb-2 sm:mb-8">
+          <h1 className="text-xl sm:text-3xl font-bold text-gray-900">
+            which club is better?
+          </h1>
         </div>
-      ) : (
-        <>
-          <div className="grid grid-cols-2 gap-2 sm:gap-6 mb-2 sm:mb-8 w-full">
+
+        {loading ? (
+          <div className="flex justify-center items-center py-10">
+            <div className="animate-spin rounded-full h-8 w-8 border-4 border-berkeley-blue border-t-transparent"></div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-2 sm:gap-6 w-full">
             {clubs.map((club) => (
               <ClubCard
                 key={club.id}
@@ -48,8 +50,12 @@ export function VoteArena() {
               />
             ))}
           </div>
+        )}
+      </div>
 
-          <div className="flex flex-col items-center gap-2 sm:gap-4 mt-auto pb-2">
+      <div className="flex-1 flex flex-col justify-end">
+        {!loading && (
+          <div className="flex flex-col items-center gap-2 sm:gap-4 pb-2">
             <div className="flex gap-2 sm:gap-4">
               <button
                 onClick={skip}
@@ -68,8 +74,8 @@ export function VoteArena() {
 
             <VoteCounter count={todayVotes} />
           </div>
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 }
