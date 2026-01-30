@@ -14,7 +14,7 @@ export function useVoting() {
   const [error, setError] = useState(null);
   const [todayVotes, setTodayVotes] = useState(0);
   const [lastVoteResult, setLastVoteResult] = useState(null);
-  const { sessionId } = useSession();
+  const { sessionId, fingerprint } = useSession();
 
   const fetchRandomPair = useCallback(async () => {
     setLoading(true);
@@ -71,6 +71,7 @@ export function useVoting() {
         p_club_b_id: clubs[1].id,
         p_winner_id: winner.id,
         p_session_id: sessionId,
+        p_fingerprint: fingerprint,
       });
 
       if (voteError) throw voteError;
@@ -93,7 +94,7 @@ export function useVoting() {
       setError('Failed to record vote. Please try again.');
       setLoading(false);
     }
-  }, [sessionId, clubs, fetchRandomPair]);
+  }, [sessionId, fingerprint, clubs, fetchRandomPair]);
 
   /**
    * Skip the current matchup without recording a vote.
@@ -107,13 +108,14 @@ export function useVoting() {
         p_club_b_id: clubs[1].id,
         p_winner_id: null,
         p_session_id: sessionId,
+        p_fingerprint: fingerprint,
       });
     } catch (err) {
       console.error('Error recording skip:', err);
     }
 
     fetchRandomPair();
-  }, [sessionId, clubs, fetchRandomPair]);
+  }, [sessionId, fingerprint, clubs, fetchRandomPair]);
 
   return {
     clubs,
