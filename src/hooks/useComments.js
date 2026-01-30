@@ -69,7 +69,7 @@ export function useComments(clubId) {
   }, [fetchComments]);
 
   const addComment = useCallback(async (content, parentId = null) => {
-    if (!clubId || !content.trim()) return;
+    if (!clubId || !sessionId || !content.trim()) return;
 
     // Check for profanity
     if (containsProfanity(content)) {
@@ -77,22 +77,25 @@ export function useComments(clubId) {
     }
 
     try {
-      const { error: insertError } = await supabase
-        .from('comments')
-        .insert({
-          club_id: clubId,
-          content: content.trim(),
-          parent_id: parentId,
-        });
+      const { data, error: rpcError } = await supabase.rpc('add_comment', {
+        p_club_id: clubId,
+        p_content: content.trim(),
+        p_session_id: sessionId,
+        p_parent_id: parentId,
+      });
 
-      if (insertError) throw insertError;
+      if (rpcError) throw rpcError;
+
+      if (!data.success) {
+        throw new Error(data.message || 'Failed to add comment.');
+      }
 
       await fetchComments();
     } catch (err) {
       console.error('Error adding comment:', err);
       throw new Error(err.message || 'Failed to add comment.');
     }
-  }, [clubId, fetchComments]);
+  }, [clubId, sessionId, fetchComments]);
 
   const voteComment = useCallback(async (commentId, voteType) => {
     if (!sessionId || !commentId) return;
@@ -137,51 +140,14 @@ export function useComments(clubId) {
     setUserVotes(newUserVotes);
 
     try {
-      if (currentVote === voteType) {
-        await supabase
-          .from('comment_votes')
-          .delete()
-          .eq('comment_id', commentId)
-          .eq('session_id', sessionId);
+      const { data, error: rpcError } = await supabase.rpc('vote_comment', {
+        p_comment_id: commentId,
+        p_session_id: sessionId,
+        p_vote_type: voteType,
+      });
 
-        const field = voteType === 'up' ? 'upvotes' : 'downvotes';
-        await supabase
-          .from('comments')
-          .update({ [field]: Math.max(0, comment[field] - 1) })
-          .eq('id', commentId);
-      } else {
-        if (currentVote) {
-          await supabase
-            .from('comment_votes')
-            .update({ vote_type: voteType })
-            .eq('comment_id', commentId)
-            .eq('session_id', sessionId);
-
-          const addField = voteType === 'up' ? 'upvotes' : 'downvotes';
-          const removeField = voteType === 'up' ? 'downvotes' : 'upvotes';
-          await supabase
-            .from('comments')
-            .update({
-              [addField]: comment[addField] + 1,
-              [removeField]: Math.max(0, comment[removeField] - 1),
-            })
-            .eq('id', commentId);
-        } else {
-          await supabase
-            .from('comment_votes')
-            .insert({
-              comment_id: commentId,
-              session_id: sessionId,
-              vote_type: voteType,
-            });
-
-          const field = voteType === 'up' ? 'upvotes' : 'downvotes';
-          await supabase
-            .from('comments')
-            .update({ [field]: comment[field] + 1 })
-            .eq('id', commentId);
-        }
-      }
+      if (rpcError) throw rpcError;
+      if (!data.success) throw new Error(data.error);
     } catch (err) {
       console.error('Error voting on comment:', err);
       // Revert on error
@@ -190,22 +156,22 @@ export function useComments(clubId) {
   }, [sessionId, userVotes, comments, fetchComments]);
 
   const reportComment = useCallback(async (commentId, reason) => {
-    if (!commentId || !reason.trim()) return;
+    if (!commentId || !sessionId || !reason.trim()) return;
 
     try {
-      const { error: insertError } = await supabase
-        .from('reports')
-        .insert({
-          comment_id: commentId,
-          reason: reason.trim(),
-        });
+      const { data, error: rpcError } = await supabase.rpc('report_comment', {
+        p_comment_id: commentId,
+        p_reason: reason.trim(),
+        p_session_id: sessionId,
+      });
 
-      if (insertError) throw insertError;
+      if (rpcError) throw rpcError;
+      if (!data.success) throw new Error(data.error);
     } catch (err) {
       console.error('Error reporting comment:', err);
       throw new Error('Failed to submit report.');
     }
-  }, []);
+  }, [sessionId]);
 
   return {
     comments,
