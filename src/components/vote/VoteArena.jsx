@@ -56,21 +56,12 @@ export function VoteArena() {
       <div className="flex-1 flex flex-col justify-end">
         {!loading && (
           <div className="flex flex-col items-center gap-2 sm:gap-4 pb-2">
-            <div className="flex gap-2 sm:gap-4">
-              <button
-                onClick={skip}
-                disabled={loading}
-                className="px-3 sm:px-6 py-1.5 sm:py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-50 text-xs sm:text-base"
-              >
-                skip
-              </button>
-              <Link
-                to="/rankings"
-                className="px-3 sm:px-6 py-1.5 sm:py-2 bg-berkeley-gold text-berkeley-blue font-semibold rounded-lg hover:bg-berkeley-gold-light transition-colors text-xs sm:text-base"
-              >
-                rankings
-              </Link>
-            </div>
+            <Link
+              to="/rankings"
+              className="px-3 sm:px-6 py-1.5 sm:py-2 bg-berkeley-gold text-berkeley-blue font-semibold rounded-lg hover:bg-berkeley-gold-light transition-colors text-xs sm:text-base"
+            >
+              rankings
+            </Link>
 
             <VoteCounter count={todayVotes} />
           </div>
