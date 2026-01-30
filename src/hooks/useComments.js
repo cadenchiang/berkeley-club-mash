@@ -2,6 +2,16 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { useSession } from './useSession';
 
+// Profanity filter - basic list of words to block
+const BLOCKED_WORDS = [
+  'nigger', 'nigga', 'faggot', 'fag', 'retard', 'kike', 'chink', 'spic', 'wetback', 'cunt'
+];
+
+const containsProfanity = (text) => {
+  const lowerText = text.toLowerCase();
+  return BLOCKED_WORDS.some((word) => lowerText.includes(word));
+};
+
 /**
  * Hook for managing comments on a club.
  * @param {string} clubId - The club's UUID.
@@ -61,6 +71,11 @@ export function useComments(clubId) {
   const addComment = useCallback(async (content, parentId = null) => {
     if (!clubId || !content.trim()) return;
 
+    // Check for profanity
+    if (containsProfanity(content)) {
+      throw new Error('Please keep comments respectful.');
+    }
+
     try {
       const { error: insertError } = await supabase
         .from('comments')
@@ -75,7 +90,7 @@ export function useComments(clubId) {
       await fetchComments();
     } catch (err) {
       console.error('Error adding comment:', err);
-      throw new Error('Failed to add comment.');
+      throw new Error(err.message || 'Failed to add comment.');
     }
   }, [clubId, fetchComments]);
 
@@ -83,6 +98,43 @@ export function useComments(clubId) {
     if (!sessionId || !commentId) return;
 
     const currentVote = userVotes[commentId];
+    const comment = comments.find((c) => c.id === commentId);
+    if (!comment) return;
+
+    // Optimistic update
+    const newComments = comments.map((c) => {
+      if (c.id !== commentId) return c;
+      const updated = { ...c };
+      if (currentVote === voteType) {
+        // Removing vote
+        if (voteType === 'up') updated.upvotes = Math.max(0, c.upvotes - 1);
+        else updated.downvotes = Math.max(0, c.downvotes - 1);
+      } else if (currentVote) {
+        // Switching vote
+        if (voteType === 'up') {
+          updated.upvotes = c.upvotes + 1;
+          updated.downvotes = Math.max(0, c.downvotes - 1);
+        } else {
+          updated.downvotes = c.downvotes + 1;
+          updated.upvotes = Math.max(0, c.upvotes - 1);
+        }
+      } else {
+        // New vote
+        if (voteType === 'up') updated.upvotes = c.upvotes + 1;
+        else updated.downvotes = c.downvotes + 1;
+      }
+      return updated;
+    });
+    setComments(newComments);
+
+    // Optimistic vote state update
+    const newUserVotes = { ...userVotes };
+    if (currentVote === voteType) {
+      delete newUserVotes[commentId];
+    } else {
+      newUserVotes[commentId] = voteType;
+    }
+    setUserVotes(newUserVotes);
 
     try {
       if (currentVote === voteType) {
@@ -93,7 +145,6 @@ export function useComments(clubId) {
           .eq('session_id', sessionId);
 
         const field = voteType === 'up' ? 'upvotes' : 'downvotes';
-        const comment = comments.find((c) => c.id === commentId);
         await supabase
           .from('comments')
           .update({ [field]: Math.max(0, comment[field] - 1) })
@@ -106,7 +157,6 @@ export function useComments(clubId) {
             .eq('comment_id', commentId)
             .eq('session_id', sessionId);
 
-          const comment = comments.find((c) => c.id === commentId);
           const addField = voteType === 'up' ? 'upvotes' : 'downvotes';
           const removeField = voteType === 'up' ? 'downvotes' : 'upvotes';
           await supabase
@@ -126,17 +176,16 @@ export function useComments(clubId) {
             });
 
           const field = voteType === 'up' ? 'upvotes' : 'downvotes';
-          const comment = comments.find((c) => c.id === commentId);
           await supabase
             .from('comments')
             .update({ [field]: comment[field] + 1 })
             .eq('id', commentId);
         }
       }
-
-      await fetchComments();
     } catch (err) {
       console.error('Error voting on comment:', err);
+      // Revert on error
+      await fetchComments();
     }
   }, [sessionId, userVotes, comments, fetchComments]);
 
