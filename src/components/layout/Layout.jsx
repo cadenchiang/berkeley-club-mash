@@ -8,9 +8,9 @@ import { Footer } from './Footer';
  */
 export function Layout({ children }) {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="h-full flex flex-col overflow-hidden sm:overflow-auto sm:min-h-screen">
       <Header />
-      <main className="flex-1 flex items-center justify-center">
+      <main className="flex-1 flex items-center justify-center overflow-hidden">
         {children}
       </main>
       <Footer />
