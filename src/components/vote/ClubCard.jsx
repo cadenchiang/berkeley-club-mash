@@ -29,9 +29,9 @@ export function ClubCard({ club, onVote, disabled }) {
           </div>
         )}
 
-        <h3 className="text-sm sm:text-xl font-bold text-gray-900 mb-1 sm:mb-2 leading-tight line-clamp-2">{club.name}</h3>
+        <h3 className="text-xs sm:text-xl font-bold text-gray-900 mb-0.5 sm:mb-2 leading-tight line-clamp-1 sm:line-clamp-2">{club.name}</h3>
 
-        <p className="text-gray-600 text-[10px] sm:text-sm flex-1 line-clamp-2 sm:line-clamp-3 leading-snug">
+        <p className="text-gray-500 text-[9px] sm:text-sm flex-1 line-clamp-3 sm:line-clamp-3 leading-tight">
           {club.description || 'No description available.'}
         </p>
 
