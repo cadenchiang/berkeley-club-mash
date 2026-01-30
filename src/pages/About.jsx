@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
  */
 export function About() {
   return (
-    <div className="max-w-md mx-auto px-4 py-4 text-center">
+    <div className="max-w-md mx-auto px-4 py-2 text-center">
       <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">clubmash</h1>
 
       <div className="space-y-3 text-gray-500 text-sm mb-6">
