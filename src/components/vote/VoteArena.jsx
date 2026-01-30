@@ -26,7 +26,7 @@ export function VoteArena() {
 
   return (
     <div className="max-w-4xl w-full h-full px-2 sm:px-4 flex flex-col items-center justify-between py-4">
-      <div className="flex-1" />
+      <div className="flex-[0.6]" />
 
       <div className="flex flex-col items-center">
         <div className="text-center mb-2 sm:mb-8">
