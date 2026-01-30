@@ -19,7 +19,7 @@ export function ClubCard({ club, onVote, disabled }) {
           <img
             src={club.image_url}
             alt={club.name}
-            className="w-28 h-28 sm:w-44 sm:h-44 rounded-xl object-cover mb-3 sm:mb-4"
+            className="w-28 h-28 sm:w-44 sm:h-44 rounded-xl object-contain mb-3 sm:mb-4 bg-gray-100 p-2"
           />
         ) : (
           <div className="w-28 h-28 sm:w-44 sm:h-44 rounded-xl bg-berkeley-blue/10 flex items-center justify-center mb-3 sm:mb-4">

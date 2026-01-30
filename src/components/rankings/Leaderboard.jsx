@@ -42,7 +42,6 @@ export function Leaderboard({ clubs, loading }) {
             <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold">ELO</th>
             <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold hidden sm:table-cell">Votes</th>
             <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold hidden md:table-cell">Win Rate</th>
-            <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold hidden lg:table-cell">Comments</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
@@ -76,7 +75,7 @@ export function Leaderboard({ clubs, loading }) {
                       <img
                         src={club.image_url}
                         alt={club.name}
-                        className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg object-cover flex-shrink-0"
+                        className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg object-contain flex-shrink-0 bg-gray-100 p-1"
                       />
                     ) : (
                       <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-berkeley-blue/10 flex items-center justify-center flex-shrink-0">
@@ -84,6 +83,9 @@ export function Leaderboard({ clubs, loading }) {
                       </div>
                     )}
                     <span className="text-sm sm:text-base">{club.name}</span>
+                    {(club.comment_count || 0) > 0 && (
+                      <span className="text-xs text-gray-300 ml-1">{club.comment_count}</span>
+                    )}
                   </Link>
                 </td>
                 <td className="px-2 sm:px-4 py-3 sm:py-4 hidden sm:table-cell">
@@ -102,14 +104,6 @@ export function Leaderboard({ clubs, loading }) {
                 </td>
                 <td className="px-2 sm:px-4 py-3 sm:py-4 text-right hidden md:table-cell">
                   <span className="text-gray-600">{winRate}%</span>
-                </td>
-                <td className="px-2 sm:px-4 py-3 sm:py-4 text-right hidden lg:table-cell">
-                  <span className="inline-flex items-center gap-1 text-gray-500">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
-                    {club.comment_count || 0}
-                  </span>
                 </td>
               </tr>
             );

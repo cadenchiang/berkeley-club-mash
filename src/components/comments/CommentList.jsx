@@ -20,24 +20,25 @@ export function CommentList({ clubId }) {
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-gray-900 mb-4">
-        Comments ({comments.length})
-      </h2>
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-sm font-medium text-gray-700">comments</span>
+        <span className="text-xs text-gray-400">{comments.length}</span>
+      </div>
 
       <CommentForm onSubmit={addComment} />
 
       {loading ? (
-        <div className="flex justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-4 border-berkeley-blue border-t-transparent"></div>
+        <div className="flex justify-center py-6">
+          <div className="animate-spin rounded-full h-6 w-6 border-2 border-gray-300 border-t-gray-600"></div>
         </div>
       ) : error ? (
-        <p className="text-red-600 text-center py-4">{error}</p>
+        <p className="text-red-500 text-sm py-3">{error}</p>
       ) : comments.length === 0 ? (
-        <p className="text-gray-500 text-center py-8">
-          No comments yet. Be the first to share your thoughts!
+        <p className="text-gray-400 text-sm py-6">
+          no comments yet
         </p>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {comments.map((comment) => (
             <CommentItem
               key={comment.id}
