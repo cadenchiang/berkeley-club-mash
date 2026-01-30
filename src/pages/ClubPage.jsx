@@ -17,6 +17,7 @@ export function ClubPage() {
     finance: 'bg-green-100 text-green-800',
     cultural: 'bg-orange-100 text-orange-800',
     social: 'bg-pink-100 text-pink-800',
+    entrepreneurship: 'bg-yellow-100 text-yellow-800',
     other: 'bg-gray-100 text-gray-800',
   };
 
