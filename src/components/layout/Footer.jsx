@@ -4,9 +4,9 @@
  */
 export function Footer() {
   return (
-    <footer className="mt-auto py-3">
-      <p className="text-center text-xs text-gray-400">
-        ClubMash is an independent project, not affiliated with UC Berkeley. For entertainment only.
+    <footer className="mt-auto py-2 px-4">
+      <p className="text-center text-[10px] sm:text-xs text-gray-400 max-w-xs sm:max-w-none mx-auto">
+        not affiliated with berkeley
       </p>
     </footer>
   );
