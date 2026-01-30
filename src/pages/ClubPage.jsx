@@ -43,45 +43,45 @@ export function ClubPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-8 h-full overflow-auto w-full">
       <Link
         to="/rankings"
-        className="inline-flex items-center text-gray-600 hover:text-berkeley-blue mb-6"
+        className="inline-flex items-center text-gray-500 hover:text-berkeley-blue mb-3 sm:mb-6 text-sm"
       >
-        <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
-        Back to Rankings
+        back
       </Link>
 
-      <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-        <div className="flex items-start gap-6 mb-6">
+      <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-8">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-6 mb-4 sm:mb-6">
           {club.image_url ? (
             <img
               src={club.image_url}
               alt={club.name}
               loading="eager"
               decoding="async"
-              className="w-24 h-24 rounded-xl object-contain bg-gray-100 p-2"
+              className="w-16 h-16 sm:w-24 sm:h-24 rounded-xl object-contain bg-gray-100 p-2"
             />
           ) : (
-            <div className="w-24 h-24 rounded-xl bg-berkeley-blue/10 flex items-center justify-center">
-              <span className="text-4xl">🏛️</span>
+            <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-xl bg-berkeley-blue/10 flex items-center justify-center">
+              <span className="text-2xl sm:text-4xl">🏛️</span>
             </div>
           )}
 
-          <div className="flex-1">
-            <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-2xl font-bold text-gray-900">{club.name}</h1>
+          <div className="flex-1 text-center sm:text-left">
+            <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3 mb-2">
+              <h1 className="text-lg sm:text-2xl font-bold text-gray-900">{club.name}</h1>
               <span className={`
-                px-2 py-1 rounded-full text-xs font-medium
+                px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium
                 ${categoryColors[club.category] || categoryColors.other}
               `}>
                 {club.category}
               </span>
             </div>
 
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-600 text-xs sm:text-base mb-2 sm:mb-4">
               {club.description || 'No description available.'}
             </p>
 
@@ -90,12 +90,12 @@ export function ClubPage() {
                 href={club.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center text-berkeley-blue hover:underline"
+                className="inline-flex items-center text-berkeley-blue hover:underline text-xs sm:text-base"
               >
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
-                Visit Website
+                website
               </a>
             )}
           </div>
