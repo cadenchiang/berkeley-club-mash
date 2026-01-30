@@ -10,7 +10,7 @@ export function Layout({ children }) {
   return (
     <div className="h-full flex flex-col">
       <Header />
-      <main className="flex-1 flex items-start sm:items-center justify-center pt-4 sm:pt-0 overflow-auto">
+      <main className="flex-1 flex items-center justify-center overflow-auto">
         {children}
       </main>
       <Footer />
