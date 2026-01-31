@@ -72,10 +72,6 @@ export function useClubs({ category = '', search = '' } = {}) {
     fetchAllClubs();
   }, [fetchAllClubs]);
 
-  useEffect(() => {
-    fetchClubs();
-  }, [fetchClubs]);
-
   return {
     clubs,
     loading,
