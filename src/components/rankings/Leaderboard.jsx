@@ -76,12 +76,12 @@ export function Leaderboard({ clubs, loading }) {
                 <td className="px-2 sm:px-4 py-3 sm:py-4">
                   <span className={`
                     inline-flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-full font-bold text-xs sm:text-sm
-                    ${index === 0 ? 'bg-yellow-100 text-yellow-800' : ''}
-                    ${index === 1 ? 'bg-gray-200 text-gray-700' : ''}
-                    ${index === 2 ? 'bg-orange-100 text-orange-800' : ''}
-                    ${index > 2 ? 'bg-gray-100 text-gray-600' : ''}
+                    ${club.rank === 1 ? 'bg-yellow-100 text-yellow-800' : ''}
+                    ${club.rank === 2 ? 'bg-gray-200 text-gray-700' : ''}
+                    ${club.rank === 3 ? 'bg-orange-100 text-orange-800' : ''}
+                    ${club.rank > 3 ? 'bg-gray-100 text-gray-600' : ''}
                   `}>
-                    {index + 1}
+                    {club.rank}
                   </span>
                 </td>
                 <td className="px-2 sm:px-4 py-3 sm:py-4">

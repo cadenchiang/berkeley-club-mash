@@ -8,38 +8,69 @@ import { supabase } from '../lib/supabase';
  * @returns {{ clubs: array, loading: boolean, error: string, refetch: function }}
  */
 export function useClubs({ category = '', search = '' } = {}) {
+  const [allClubs, setAllClubs] = useState([]);
   const [clubs, setClubs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchClubs = useCallback(async () => {
+  // Fetch all clubs once with ranks assigned
+  const fetchAllClubs = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
       const { data, error: fetchError } = await supabase.rpc('get_clubs_with_comments', {
-        p_category: category || null,
-        p_search: search || null,
+        p_category: null,
+        p_search: null,
       });
 
       if (fetchError) throw fetchError;
 
+      // Assign global rank to each club (data is already sorted by ELO)
+      const rankedData = (data || []).map((club, index) => ({
+        ...club,
+        rank: index + 1,
+      }));
+
       // Preload first 15 club images for instant rendering
-      (data || []).slice(0, 15).forEach((club) => {
+      rankedData.slice(0, 15).forEach((club) => {
         if (club.image_url) {
           const img = new Image();
           img.src = club.image_url;
         }
       });
 
-      setClubs(data || []);
+      setAllClubs(rankedData);
     } catch (err) {
       console.error('Error fetching clubs:', err);
       setError('Failed to load clubs. Please try again.');
     } finally {
       setLoading(false);
     }
-  }, [category, search]);
+  }, []);
+
+  // Filter clubs client-side based on category and search
+  useEffect(() => {
+    let filtered = allClubs;
+
+    if (category && category !== 'all') {
+      filtered = filtered.filter((club) => club.category === category);
+    }
+
+    if (search) {
+      const searchLower = search.toLowerCase();
+      filtered = filtered.filter((club) =>
+        club.name.toLowerCase().includes(searchLower)
+      );
+    }
+
+    setClubs(filtered);
+  }, [allClubs, category, search]);
+
+  // Initial fetch
+  useEffect(() => {
+    fetchAllClubs();
+  }, [fetchAllClubs]);
 
   useEffect(() => {
     fetchClubs();
@@ -49,7 +80,7 @@ export function useClubs({ category = '', search = '' } = {}) {
     clubs,
     loading,
     error,
-    refetch: fetchClubs,
+    refetch: fetchAllClubs,
   };
 }
 
