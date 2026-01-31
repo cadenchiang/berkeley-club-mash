@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ClubCard } from './ClubCard';
 import { VoteCounter } from './VoteCounter';
@@ -10,29 +9,9 @@ import { useVoting } from '../../hooks/useVoting';
  */
 export function VoteArena() {
   const { clubs, loading, error, totalWins, lastVoteResult, vote, skip } = useVoting();
-  const [voteResult, setVoteResult] = useState(null);
-  const [showingResult, setShowingResult] = useState(false);
 
   const handleVote = async (club) => {
-    const loser = clubs.find(c => c.id !== club.id);
-    setVoteResult({ winner: club, loser });
-    setShowingResult(true);
-
-    // Record vote and get ELO changes
-    const result = await vote(club);
-    if (result?.winner_change !== undefined) {
-      setVoteResult(prev => ({
-        ...prev,
-        winnerChange: result.winner_change,
-        loserChange: result.loser_change
-      }));
-    }
-
-    // Show result for 1.5 seconds then reset
-    setTimeout(() => {
-      setShowingResult(false);
-      setVoteResult(null);
-    }, 1500);
+    await vote(club);
   };
 
   if (error) {
@@ -64,44 +43,6 @@ export function VoteArena() {
           <div className="flex justify-center items-center py-10">
             <div className="animate-spin rounded-full h-8 w-8 border-4 border-berkeley-blue border-t-transparent"></div>
           </div>
-        ) : showingResult && voteResult ? (
-          <div className="grid grid-cols-2 gap-2 sm:gap-6 w-full">
-            {/* Winner */}
-            <div className="relative bg-white rounded-xl shadow-lg p-4 sm:p-6 text-center border-2 border-green-400">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                WINNER
-              </div>
-              {voteResult.winner.image_url && (
-                <img
-                  src={voteResult.winner.image_url}
-                  alt={voteResult.winner.name}
-                  className="w-20 h-20 sm:w-28 sm:h-28 rounded-xl object-contain mx-auto mb-2 bg-gray-100 p-2"
-                />
-              )}
-              <div className="text-sm sm:text-lg font-bold text-gray-900 mb-2">{voteResult.winner.name}</div>
-              {voteResult.winnerChange !== undefined && (
-                <div className="text-2xl sm:text-3xl font-bold text-green-500 animate-bounce">
-                  +{voteResult.winnerChange} 🏆
-                </div>
-              )}
-            </div>
-            {/* Loser */}
-            <div className="relative bg-white rounded-xl shadow-lg p-4 sm:p-6 text-center border-2 border-red-300 opacity-75">
-              {voteResult.loser.image_url && (
-                <img
-                  src={voteResult.loser.image_url}
-                  alt={voteResult.loser.name}
-                  className="w-20 h-20 sm:w-28 sm:h-28 rounded-xl object-contain mx-auto mb-2 bg-gray-100 p-2 grayscale"
-                />
-              )}
-              <div className="text-sm sm:text-lg font-bold text-gray-500 mb-2">{voteResult.loser.name}</div>
-              {voteResult.loserChange !== undefined && (
-                <div className="text-2xl sm:text-3xl font-bold text-red-500">
-                  {voteResult.loserChange} 🏆
-                </div>
-              )}
-            </div>
-          </div>
         ) : (
           <div className="grid grid-cols-2 gap-2 sm:gap-6 w-full">
             {clubs.map((club) => (
@@ -109,7 +50,7 @@ export function VoteArena() {
                 key={club.id}
                 club={club}
                 onVote={handleVote}
-                disabled={loading || showingResult}
+                disabled={loading}
               />
             ))}
           </div>
