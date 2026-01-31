@@ -22,7 +22,7 @@ export function useComments(clubId) {
   const [userVotes, setUserVotes] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { sessionId } = useSession();
+  const { sessionId, fingerprint } = useSession();
 
   const fetchComments = useCallback(async () => {
     if (!clubId) return;
@@ -140,20 +140,28 @@ export function useComments(clubId) {
     setUserVotes(newUserVotes);
 
     try {
-      const { data, error: rpcError } = await supabase.rpc('vote_comment', {
-        p_comment_id: commentId,
-        p_session_id: sessionId,
-        p_vote_type: voteType,
+      // Use edge function for IP-based rate limiting
+      const response = await fetch('https://hdutqumpmbsoqnlatloy.supabase.co/functions/v1/vote-comment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          p_comment_id: commentId,
+          p_session_id: sessionId,
+          p_vote_type: voteType,
+          p_fingerprint: fingerprint,
+        }),
       });
 
-      if (rpcError) throw rpcError;
-      if (!data.success) throw new Error(data.error);
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || data.error || 'Vote failed');
+      }
     } catch (err) {
       console.error('Error voting on comment:', err);
       // Revert on error
       await fetchComments();
     }
-  }, [sessionId, userVotes, comments, fetchComments]);
+  }, [sessionId, fingerprint, userVotes, comments, fetchComments]);
 
   const reportComment = useCallback(async (commentId, reason) => {
     if (!commentId || !sessionId || !reason.trim()) return;

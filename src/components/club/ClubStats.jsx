@@ -1,4 +1,16 @@
 /**
+ * Formats a number with k suffix for thousands.
+ * @param {number} num - Number to format.
+ * @returns {string} Formatted string (e.g., "1.2k").
+ */
+function formatNumber(num) {
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+  }
+  return num.toString();
+}
+
+/**
  * Club statistics component.
  * Displays ELO rating, win rate, and total votes.
  * @param {{ club: object }} props
@@ -19,7 +31,7 @@ export function ClubStats({ club }) {
         <div className="text-[10px] sm:text-sm text-gray-500">win rate</div>
       </div>
       <div className="bg-gray-50 rounded-lg p-2 sm:p-4 text-center">
-        <div className="text-lg sm:text-3xl font-bold text-gray-700">{club.wins}</div>
+        <div className="text-lg sm:text-3xl font-bold text-gray-700">{formatNumber(club.wins)}</div>
         <div className="text-[10px] sm:text-sm text-gray-500">wins</div>
       </div>
     </div>

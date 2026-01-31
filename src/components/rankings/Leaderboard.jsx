@@ -1,6 +1,18 @@
 import { Link } from 'react-router-dom';
 
 /**
+ * Formats a number with k suffix for thousands.
+ * @param {number} num - Number to format.
+ * @returns {string} Formatted string (e.g., "1.2k").
+ */
+function formatNumber(num) {
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+  }
+  return num.toString();
+}
+
+/**
  * Leaderboard component.
  * Displays ranked list of clubs with comment counts.
  * @param {{ clubs: array, loading: boolean }} props
@@ -40,7 +52,11 @@ export function Leaderboard({ clubs, loading }) {
             <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold w-12 sm:w-16">#</th>
             <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold">Club</th>
             <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold hidden sm:table-cell">Category</th>
-            <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold">🏆</th>
+            <th className="px-2 sm:px-4 py-2 sm:py-3 text-center text-xs sm:text-sm font-semibold">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/>
+              </svg>
+            </th>
             <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold">Wins</th>
             <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold hidden md:table-cell">Win Rate</th>
           </tr>
@@ -54,7 +70,8 @@ export function Leaderboard({ clubs, loading }) {
             return (
               <tr
                 key={club.id}
-                className="hover:bg-gray-50 transition-colors"
+                className="hover:bg-gray-50 transition-colors animate-fade-in"
+                style={{ animationDelay: `${index * 30}ms` }}
               >
                 <td className="px-2 sm:px-4 py-3 sm:py-4">
                   <span className={`
@@ -107,11 +124,11 @@ export function Leaderboard({ clubs, loading }) {
                     {club.category}
                   </span>
                 </td>
-                <td className="px-2 sm:px-4 py-3 sm:py-4 text-right">
+                <td className="px-2 sm:px-4 py-3 sm:py-4 text-center">
                   <span className="font-bold text-berkeley-blue text-sm sm:text-base">{club.elo_rating}</span>
                 </td>
                 <td className="px-2 sm:px-4 py-3 sm:py-4 text-right">
-                  <span className="text-gray-600 text-xs sm:text-base">{club.wins}</span>
+                  <span className="text-gray-600 text-xs sm:text-base">{formatNumber(club.wins)}</span>
                 </td>
                 <td className="px-2 sm:px-4 py-3 sm:py-4 text-right hidden md:table-cell">
                   <span className="text-gray-600">{winRate}</span>

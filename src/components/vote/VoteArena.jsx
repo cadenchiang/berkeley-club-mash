@@ -71,6 +71,9 @@ export function VoteArena() {
           </div>
         )}
       </div>
+
+      {/* Turnstile container - positioned off-screen */}
+      <div id="turnstile-container" className="fixed -left-[9999px]"></div>
     </div>
   );
 }

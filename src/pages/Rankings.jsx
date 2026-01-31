@@ -10,13 +10,44 @@ import { useClubs } from '../hooks/useClubs';
 export function Rankings() {
   const [category, setCategory] = useState('all');
   const [search, setSearch] = useState('');
+  const [showInfo, setShowInfo] = useState(false);
   const { clubs, loading, error, refetch } = useClubs({ category, search });
 
   return (
     <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-8 h-full overflow-auto">
       <div className="mb-4 sm:mb-8 flex items-start justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">Club Rankings</h1>
+          <div className="flex items-center gap-2 mb-1 sm:mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Club Rankings</h1>
+            <div className="relative">
+              <button
+                onClick={() => setShowInfo(!showInfo)}
+                className="text-gray-400 hover:text-berkeley-blue transition-colors"
+                title="How rankings work"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </button>
+              <div
+                className={`fixed inset-0 z-40 transition-opacity duration-200 ${showInfo ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                onClick={() => setShowInfo(false)}
+              />
+              <div className={`
+                absolute left-0 top-8 z-50 w-72 bg-white border border-gray-200 rounded-lg shadow-lg p-4 text-sm
+                transition-all duration-200 origin-top-left
+                ${showInfo ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}
+              `}>
+                <p className="font-semibold text-gray-900 mb-2">How rankings work</p>
+                <ul className="list-disc list-inside space-y-1 text-gray-600">
+                  <li>Rankings use the ELO system (like chess)</li>
+                  <li>Beating higher-ranked clubs earns more points</li>
+                  <li>Losing to lower-ranked clubs costs more points</li>
+                  <li>More votes = more accurate rankings</li>
+                </ul>
+              </div>
+            </div>
+          </div>
           <p className="text-gray-600 text-sm sm:text-base">
             See how Berkeley clubs stack up based on community votes.
           </p>
