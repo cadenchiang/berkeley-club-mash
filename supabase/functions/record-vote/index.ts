@@ -98,7 +98,7 @@ Deno.serve(async (req) => {
       p_winner_id,
       p_session_id,
       p_fingerprint,
-      p_edge_secret: 'clubmash_edge_secret_2024',
+      p_edge_secret: Deno.env.get('EDGE_SECRET') ?? '',
     })
 
     if (error) {
