@@ -84,21 +84,15 @@ export function CommentList({ clubId }) {
           <span className="text-sm font-medium text-gray-700">comments</span>
           <span className="text-xs text-gray-400">{comments.length}</span>
         </div>
-        <div className="flex items-center gap-2">
-          {['hot', 'top', 'new'].map((mode) => (
-            <button
-              key={mode}
-              onClick={() => setSortMode(mode)}
-              className={`text-xs transition-colors ${
-                sortMode === mode
-                  ? 'text-gray-600 font-medium'
-                  : 'text-gray-350 hover:text-gray-500'
-              }`}
-            >
-              {mode}
-            </button>
-          ))}
-        </div>
+        <select
+          value={sortMode}
+          onChange={(e) => setSortMode(e.target.value)}
+          className="text-xs text-gray-400 bg-transparent border-none outline-none cursor-pointer appearance-none pr-3 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2210%22%20height%3D%226%22%3E%3Cpath%20d%3D%22M0%200l5%206%205-6z%22%20fill%3D%22%239ca3af%22%2F%3E%3C%2Fsvg%3E')] bg-[length:10px_6px] bg-[right_center] bg-no-repeat"
+        >
+          <option value="hot">hot</option>
+          <option value="top">top</option>
+          <option value="new">new</option>
+        </select>
       </div>
 
       <CommentForm onSubmit={addComment} />
