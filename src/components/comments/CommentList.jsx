@@ -84,37 +84,20 @@ export function CommentList({ clubId }) {
           <span className="text-sm font-medium text-gray-700">comments</span>
           <span className="text-xs text-gray-400">{comments.length}</span>
         </div>
-        <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-0.5">
-          <button
-            onClick={() => setSortMode('hot')}
-            className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors ${
-              sortMode === 'hot'
-                ? 'bg-white text-gray-800 shadow-sm'
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            hot
-          </button>
-          <button
-            onClick={() => setSortMode('top')}
-            className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors ${
-              sortMode === 'top'
-                ? 'bg-white text-gray-800 shadow-sm'
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            top
-          </button>
-          <button
-            onClick={() => setSortMode('new')}
-            className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors ${
-              sortMode === 'new'
-                ? 'bg-white text-gray-800 shadow-sm'
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            new
-          </button>
+        <div className="flex items-center gap-2">
+          {['hot', 'top', 'new'].map((mode) => (
+            <button
+              key={mode}
+              onClick={() => setSortMode(mode)}
+              className={`text-xs transition-colors ${
+                sortMode === mode
+                  ? 'text-gray-600 font-medium'
+                  : 'text-gray-350 hover:text-gray-500'
+              }`}
+            >
+              {mode}
+            </button>
+          ))}
         </div>
       </div>
 
