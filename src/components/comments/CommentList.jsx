@@ -108,21 +108,22 @@ export function CommentList({ clubId }) {
           no comments yet
         </p>
       ) : (
-        <div className="space-y-3">
+        <div className="divide-y divide-gray-100">
           {parentComments.map((comment) => (
-            <CommentItem
-              key={comment.id}
-              comment={comment}
-              userVote={userVotes[comment.id]}
-              onVote={voteComment}
-              onReport={reportComment}
-              onReply={addComment}
-              onDelete={deleteComment}
-              replies={repliesByParent[comment.id] || []}
-              userVotes={userVotes}
-              currentSessionId={sessionId}
-              repliesByParent={repliesByParent}
-            />
+            <div key={comment.id} className="py-3 first:pt-0">
+              <CommentItem
+                comment={comment}
+                userVote={userVotes[comment.id]}
+                onVote={voteComment}
+                onReport={reportComment}
+                onReply={addComment}
+                onDelete={deleteComment}
+                replies={repliesByParent[comment.id] || []}
+                userVotes={userVotes}
+                currentSessionId={sessionId}
+                repliesByParent={repliesByParent}
+              />
+            </div>
           ))}
         </div>
       )}
