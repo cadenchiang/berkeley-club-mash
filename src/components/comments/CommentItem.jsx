@@ -7,7 +7,7 @@ import { CommentForm } from './CommentForm';
  * Displays comment with voting, reply, delete, and report options.
  * @param {{ comment: object, userVote: string, onVote: function, onReport: function, onReply: function, onDelete: function, replies: array, userVotes: object, currentSessionId: string, isReply: boolean }} props
  */
-export function CommentItem({ comment, userVote, onVote, onReport, onReply, onDelete, replies = [], userVotes = {}, currentSessionId = '', isReply = false }) {
+export function CommentItem({ comment, userVote, onVote, onReport, onReply, onDelete, replies = [], userVotes = {}, currentSessionId = '', isReply = false, repliesByParent = {} }) {
   const [showReportModal, setShowReportModal] = useState(false);
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -89,14 +89,12 @@ export function CommentItem({ comment, userVote, onVote, onReport, onReply, onDe
             {formatDate(comment.created_at)}
           </span>
 
-          {!isReply && (
-            <button
-              onClick={() => setShowReplyForm(!showReplyForm)}
-              className="text-sm text-gray-400 hover:text-berkeley-blue transition-colors"
-            >
-              reply
-            </button>
-          )}
+          <button
+            onClick={() => setShowReplyForm(!showReplyForm)}
+            className="text-sm text-gray-400 hover:text-berkeley-blue transition-colors"
+          >
+            reply
+          </button>
         </div>
 
         <div className="flex items-center gap-3">
@@ -138,8 +136,10 @@ export function CommentItem({ comment, userVote, onVote, onReport, onReply, onDe
               onReport={onReport}
               onReply={onReply}
               onDelete={onDelete}
+              replies={repliesByParent[reply.id] || []}
               userVotes={userVotes}
               currentSessionId={currentSessionId}
+              repliesByParent={repliesByParent}
               isReply
             />
           ))}

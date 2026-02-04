@@ -121,6 +121,7 @@ export function CommentList({ clubId }) {
               replies={repliesByParent[comment.id] || []}
               userVotes={userVotes}
               currentSessionId={sessionId}
+              repliesByParent={repliesByParent}
             />
           ))}
         </div>
