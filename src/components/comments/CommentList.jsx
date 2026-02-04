@@ -6,7 +6,7 @@ import { useComments } from '../../hooks/useComments';
 /**
  * Comment list component.
  * Displays all comments for a club with add/vote/report and sort functionality.
- * Supports "hot" (net votes descending) and "new" (time descending) sort modes.
+ * Supports "hot" (recency-weighted votes), "top" (pure net votes), and "new" (time) sort modes.
  * @param {{ clubId: string }} props
  */
 export function CommentList({ clubId }) {
@@ -45,7 +45,21 @@ export function CommentList({ clubId }) {
     });
 
     // Sort parent comments by selected mode
+    const now = Date.now();
     if (sortMode === 'hot') {
+      // Hot: net votes decayed by age — recent popular comments rise to top
+      parents.sort((a, b) => {
+        const netA = (a.upvotes || 0) - (a.downvotes || 0);
+        const netB = (b.upvotes || 0) - (b.downvotes || 0);
+        const hoursA = (now - new Date(a.created_at).getTime()) / 3600000;
+        const hoursB = (now - new Date(b.created_at).getTime()) / 3600000;
+        const scoreA = netA / Math.pow(hoursA + 2, 1.5);
+        const scoreB = netB / Math.pow(hoursB + 2, 1.5);
+        if (scoreB !== scoreA) return scoreB - scoreA;
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+    } else if (sortMode === 'top') {
+      // Top: pure net votes, all-time highest first
       parents.sort((a, b) => {
         const netA = (a.upvotes || 0) - (a.downvotes || 0);
         const netB = (b.upvotes || 0) - (b.downvotes || 0);
@@ -53,6 +67,7 @@ export function CommentList({ clubId }) {
         return new Date(b.created_at) - new Date(a.created_at);
       });
     } else {
+      // New: most recent first
       parents.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     }
 
@@ -79,6 +94,16 @@ export function CommentList({ clubId }) {
             }`}
           >
             hot
+          </button>
+          <button
+            onClick={() => setSortMode('top')}
+            className={`px-2.5 py-1 text-xs font-medium rounded-md transition-colors ${
+              sortMode === 'top'
+                ? 'bg-white text-gray-800 shadow-sm'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            top
           </button>
           <button
             onClick={() => setSortMode('new')}
