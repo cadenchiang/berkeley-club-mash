@@ -23,7 +23,8 @@ export function Layout({ children }) {
         sitekey: TURNSTILE_SITE_KEY,
         size: 'compact',
         callback: (token) => {
-          console.warn('[Turnstile] ✓ Verified successfully');
+          window.__turnstileToken = token;
+          console.warn('[Turnstile] ✓ Token ready');
         },
         'error-callback': (error) => {
           console.warn('[Turnstile] ✗ Error:', error);
@@ -37,6 +38,14 @@ export function Layout({ children }) {
       });
 
       console.warn('[Turnstile] Widget rendered, id:', widgetIdRef.current);
+
+      // Expose reset function so voting hook can request fresh tokens
+      window.__resetTurnstile = () => {
+        window.__turnstileToken = null;
+        if (widgetIdRef.current && window.turnstile) {
+          window.turnstile.reset(widgetIdRef.current);
+        }
+      };
     };
 
     // Wait for Turnstile script to load

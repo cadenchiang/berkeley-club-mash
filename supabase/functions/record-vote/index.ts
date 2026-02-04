@@ -8,7 +8,7 @@ const corsHeaders = {
 // In-memory rate limit store
 const ipVotes: Map<string, { count: number; resetAt: number }> = new Map()
 
-const RATE_LIMIT = 200 // votes per hour before auto-ban
+const RATE_LIMIT = 100 // votes per hour before auto-ban
 const WINDOW_MS = 60 * 60 * 1000 // 1 hour
 
 function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
@@ -74,12 +74,35 @@ Deno.serve(async (req) => {
       )
     }
 
-    const { p_club_a_id, p_club_b_id, p_winner_id, p_session_id, p_fingerprint } = await req.json()
+    const { p_club_a_id, p_club_b_id, p_winner_id, p_session_id, p_fingerprint, turnstile_token } = await req.json()
 
     if (!p_club_a_id || !p_club_b_id || !p_session_id) {
       return new Response(
         JSON.stringify({ success: false, error: 'missing_params' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Validate Cloudflare Turnstile token
+    const turnstileSecret = Deno.env.get('TURNSTILE_SECRET_KEY')
+    if (turnstileSecret && turnstile_token) {
+      const tsRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `secret=${encodeURIComponent(turnstileSecret)}&response=${encodeURIComponent(turnstile_token)}&remoteip=${encodeURIComponent(ip)}`,
+      })
+      const tsData = await tsRes.json()
+      if (!tsData.success) {
+        return new Response(
+          JSON.stringify({ success: false, error: 'captcha_failed' }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
+    } else if (turnstileSecret && !turnstile_token) {
+      // Secret is configured but no token sent — likely a bot calling API directly
+      return new Response(
+        JSON.stringify({ success: false, error: 'captcha_required' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
@@ -99,6 +122,7 @@ Deno.serve(async (req) => {
       p_session_id,
       p_fingerprint,
       p_edge_secret: '3eQp1PxTiWdLH6E1qZqgP0NHlE7atSI9',
+      p_ip_address: ip,
     })
 
     if (error) {

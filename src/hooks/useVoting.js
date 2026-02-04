@@ -88,6 +88,10 @@ export function useVoting() {
 
     setTotalWins((prev) => prev + 1);
 
+    // Grab Turnstile token (may be null if script blocked)
+    const turnstileToken = window.__turnstileToken || null;
+    if (window.__resetTurnstile) window.__resetTurnstile();
+
     // Fire vote request
     fetch('/api/vote', {
       method: 'POST',
@@ -98,6 +102,7 @@ export function useVoting() {
         p_winner_id: winner.id,
         p_session_id: sessionId,
         p_fingerprint: fingerprint,
+        turnstile_token: turnstileToken,
       }),
     }).then(async (res) => {
       const data = await res.json();
