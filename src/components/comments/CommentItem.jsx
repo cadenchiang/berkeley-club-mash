@@ -63,8 +63,8 @@ export function CommentItem({ comment, userVote, onVote, onReport, onReply, onDe
           onClick={() => onVote(comment.id, 'up')}
           className={`p-0.5 rounded transition-colors ${
             userVote === 'up'
-              ? 'text-orange-500'
-              : 'text-gray-400 hover:text-orange-500'
+              ? 'text-green-600'
+              : 'text-gray-400 hover:text-green-600'
           }`}
           title="Upvote"
         >
@@ -73,8 +73,8 @@ export function CommentItem({ comment, userVote, onVote, onReport, onReply, onDe
           </svg>
         </button>
         <span className={`text-xs font-medium min-w-[1rem] text-center ${
-          netVotes > 0 ? 'text-orange-500' :
-          netVotes < 0 ? 'text-blue-500' : 'text-gray-400'
+          netVotes > 0 ? 'text-green-600' :
+          netVotes < 0 ? 'text-red-600' : 'text-gray-400'
         }`}>
           {netVotes}
         </span>
@@ -82,8 +82,8 @@ export function CommentItem({ comment, userVote, onVote, onReport, onReply, onDe
           onClick={() => onVote(comment.id, 'down')}
           className={`p-0.5 rounded transition-colors ${
             userVote === 'down'
-              ? 'text-blue-500'
-              : 'text-gray-400 hover:text-blue-500'
+              ? 'text-red-600'
+              : 'text-gray-400 hover:text-red-600'
           }`}
           title="Downvote"
         >
