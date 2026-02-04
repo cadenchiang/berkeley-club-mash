@@ -140,8 +140,8 @@ export function useComments(clubId) {
     setUserVotes(newUserVotes);
 
     try {
-      // Use edge function for IP-based rate limiting
-      const response = await fetch('https://hdutqumpmbsoqnlatloy.supabase.co/functions/v1/vote-comment', {
+      // Use local API proxy for IP-based rate limiting
+      const response = await fetch('/api/vote-comment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -181,13 +181,35 @@ export function useComments(clubId) {
     }
   }, [sessionId]);
 
+  const deleteComment = useCallback(async (commentId) => {
+    if (!commentId || !sessionId) return;
+
+    try {
+      const { data, error: rpcError } = await supabase.rpc('delete_own_comment', {
+        p_comment_id: commentId,
+        p_session_id: sessionId,
+      });
+
+      if (rpcError) throw rpcError;
+      if (!data.success) throw new Error(data.message || 'Failed to delete comment.');
+
+      // Remove from local state
+      setComments((prev) => prev.filter((c) => c.id !== commentId && c.parent_id !== commentId));
+    } catch (err) {
+      console.error('Error deleting comment:', err);
+      throw new Error(err.message || 'Failed to delete comment.');
+    }
+  }, [sessionId]);
+
   return {
     comments,
     userVotes,
     loading,
     error,
+    sessionId,
     addComment,
     voteComment,
     reportComment,
+    deleteComment,
   };
 }

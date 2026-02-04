@@ -1,6 +1,5 @@
 {
   "rewrites": [
-    { "source": "/api/vote", "destination": "https://hdutqumpmbsoqnlatloy.supabase.co/functions/v1/record-vote" },
     { "source": "/((?!api|logos|assets).*)", "destination": "/index.html" }
   ],
   "headers": [

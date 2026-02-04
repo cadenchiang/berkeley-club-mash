@@ -62,7 +62,7 @@ export function VoteArena() {
           <div className="flex flex-col items-center gap-2 sm:gap-4 pb-2">
             <Link
               to="/rankings"
-              className="px-3 sm:px-6 py-1.5 sm:py-2 bg-berkeley-gold text-berkeley-blue font-semibold rounded-lg hover:bg-berkeley-gold-light transition-colors text-xs sm:text-base"
+              className="px-3 sm:px-6 py-1.5 sm:py-2 bg-berkeley-gold font-semibold rounded-lg hover:bg-berkeley-gold-light transition-colors text-xs sm:text-base text-[#003262]"
             >
               rankings
             </Link>

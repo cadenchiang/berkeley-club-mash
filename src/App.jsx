@@ -6,12 +6,16 @@ import { Rankings } from './pages/Rankings';
 import { ClubPage } from './pages/ClubPage';
 import { About } from './pages/About';
 import { Admin } from './pages/Admin';
+import { useTheme } from './hooks/useTheme';
 
 /**
  * Main application component.
- * Sets up routing and layout wrapper.
+ * Sets up routing, theme, and layout wrapper.
  */
 function App() {
+  // Initialize theme (applies dark class to html element)
+  useTheme();
+
   return (
     <>
       <BrowserRouter>

@@ -4,12 +4,27 @@ import { CommentForm } from './CommentForm';
 
 /**
  * Single comment item component.
- * Displays comment with voting, reply, and report options.
- * @param {{ comment: object, userVote: string, onVote: function, onReport: function, onReply: function, replies: array, userVotes: object, isReply: boolean }} props
+ * Displays comment with voting, reply, delete, and report options.
+ * @param {{ comment: object, userVote: string, onVote: function, onReport: function, onReply: function, onDelete: function, replies: array, userVotes: object, currentSessionId: string, isReply: boolean }} props
  */
-export function CommentItem({ comment, userVote, onVote, onReport, onReply, replies = [], userVotes = {}, isReply = false }) {
+export function CommentItem({ comment, userVote, onVote, onReport, onReply, onDelete, replies = [], userVotes = {}, currentSessionId = '', isReply = false }) {
   const [showReportModal, setShowReportModal] = useState(false);
   const [showReplyForm, setShowReplyForm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const isOwnComment = currentSessionId && comment.session_id === currentSessionId;
+
+  const handleDelete = async () => {
+    if (!confirm('Delete this comment?')) return;
+    setDeleting(true);
+    try {
+      await onDelete(comment.id);
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -84,12 +99,23 @@ export function CommentItem({ comment, userVote, onVote, onReport, onReply, repl
           )}
         </div>
 
-        <button
-          onClick={() => setShowReportModal(true)}
-          className="text-sm text-gray-400 hover:text-red-600 transition-colors"
-        >
-          report
-        </button>
+        <div className="flex items-center gap-3">
+          {isOwnComment && (
+            <button
+              onClick={handleDelete}
+              disabled={deleting}
+              className="text-sm text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50"
+            >
+              {deleting ? '...' : 'delete'}
+            </button>
+          )}
+          <button
+            onClick={() => setShowReportModal(true)}
+            className="text-sm text-gray-400 hover:text-red-600 transition-colors"
+          >
+            report
+          </button>
+        </div>
       </div>
 
       {showReplyForm && (
@@ -111,6 +137,9 @@ export function CommentItem({ comment, userVote, onVote, onReport, onReply, repl
               onVote={onVote}
               onReport={onReport}
               onReply={onReply}
+              onDelete={onDelete}
+              userVotes={userVotes}
+              currentSessionId={currentSessionId}
               isReply
             />
           ))}

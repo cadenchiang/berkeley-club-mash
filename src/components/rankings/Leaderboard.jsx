@@ -61,7 +61,7 @@ export function Leaderboard({ clubs, loading }) {
             <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold hidden md:table-cell">Win Rate</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody>
           {clubs.map((club, index) => {
             const winRate = club.total_votes > 0
               ? ((club.wins / club.total_votes) * 100).toFixed(1) + '%'

@@ -59,19 +59,31 @@ Deno.serve(async (req) => {
       )
     }
 
-    // Create Supabase client with service role for database access
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
+    // Create Supabase client (using anon key since functions use SECURITY DEFINER)
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || Deno.env.get('SUPABASE_ANON_KEY')
 
-    // Log the vote attempt with IP for tracking
-    await supabase.from('vote_logs').insert({
-      ip_address: ip,
-      comment_id: p_comment_id,
-      session_id: p_session_id,
-      fingerprint: p_fingerprint,
-    }).catch(() => {}) // Ignore errors on logging
+    if (!supabaseUrl || !supabaseKey) {
+      console.error('Missing env vars:', { url: !!supabaseUrl, key: !!supabaseKey })
+      return new Response(
+        JSON.stringify({ success: false, error: 'config_error' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    // Log the vote attempt with IP for tracking (ignore errors)
+    try {
+      await supabase.from('vote_logs').insert({
+        ip_address: ip,
+        comment_id: p_comment_id,
+        session_id: p_session_id,
+        fingerprint: p_fingerprint,
+      })
+    } catch {
+      // Ignore logging errors
+    }
 
     // Call the database function
     const { data, error } = await supabase.rpc('vote_comment', {
@@ -82,6 +94,7 @@ Deno.serve(async (req) => {
     })
 
     if (error) {
+      console.error('vote_comment RPC error:', error)
       return new Response(
         JSON.stringify({ success: false, error: error.message }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -93,8 +106,9 @@ Deno.serve(async (req) => {
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   } catch (err) {
+    console.error('vote-comment function error:', err)
     return new Response(
-      JSON.stringify({ success: false, error: 'server_error' }),
+      JSON.stringify({ success: false, error: 'server_error', details: String(err) }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }
