@@ -113,6 +113,10 @@ export function useComments(clubId) {
     const comment = comments.find((c) => c.id === commentId);
     if (!comment) return;
 
+    // Save previous state for rollback
+    const prevComments = comments;
+    const prevUserVotes = userVotes;
+
     // Optimistic update
     const newComments = comments.map((c) => {
       if (c.id !== commentId) return c;
@@ -167,10 +171,11 @@ export function useComments(clubId) {
       }
     } catch (err) {
       console.error('Error voting on comment:', err);
-      // Revert on error
-      await fetchComments();
+      // Revert to previous state without refetching
+      setComments(prevComments);
+      setUserVotes(prevUserVotes);
     }
-  }, [sessionId, fingerprint, userVotes, comments, fetchComments]);
+  }, [sessionId, fingerprint, userVotes, comments]);
 
   const reportComment = useCallback(async (commentId, reason) => {
     if (!commentId || !sessionId || !reason.trim()) return;

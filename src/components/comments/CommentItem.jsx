@@ -60,6 +60,7 @@ export function CommentItem({ comment, userVote, onVote, onReport, onReply, onDe
       {/* Actions row — inline like Reddit */}
       <div className="flex items-center gap-1 -ml-1">
         <button
+          type="button"
           onClick={() => onVote(comment.id, 'up')}
           className={`p-0.5 rounded transition-colors ${
             userVote === 'up'
@@ -79,6 +80,7 @@ export function CommentItem({ comment, userVote, onVote, onReport, onReply, onDe
           {netVotes}
         </span>
         <button
+          type="button"
           onClick={() => onVote(comment.id, 'down')}
           className={`p-0.5 rounded transition-colors ${
             userVote === 'down'
