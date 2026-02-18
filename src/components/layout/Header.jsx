@@ -18,7 +18,7 @@ export function Header() {
       <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-1.5 sm:gap-2">
-            <span className="text-xl sm:text-2xl">🐻</span>
+            <img src="/favicon.svg" alt="" className="w-6 h-6 sm:w-7 sm:h-7" />
             <span className="text-lg sm:text-xl font-bold text-berkeley-gold">ClubMash</span>
           </Link>
 
