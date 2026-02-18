@@ -71,23 +71,32 @@ export function useComments(clubId) {
   const addComment = useCallback(async (content, parentId = null) => {
     if (!clubId || !sessionId || !content.trim()) return;
 
-    // Check for profanity
+    // Check for profanity (client-side pre-check)
     if (containsProfanity(content)) {
       throw new Error('Please keep comments respectful.');
     }
 
     try {
-      const { data, error: rpcError } = await supabase.rpc('add_comment', {
-        p_club_id: clubId,
-        p_content: content.trim(),
-        p_session_id: sessionId,
-        p_parent_id: parentId,
+      // Grab Turnstile token (may be null if script blocked)
+      const turnstileToken = window.__turnstileToken || null;
+      if (window.__resetTurnstile) window.__resetTurnstile();
+
+      const response = await fetch('/api/add-comment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          p_club_id: clubId,
+          p_content: content.trim(),
+          p_session_id: sessionId,
+          p_parent_id: parentId,
+          turnstile_token: turnstileToken,
+        }),
       });
 
-      if (rpcError) throw rpcError;
+      const data = await response.json();
 
-      if (!data.success) {
-        throw new Error(data.message || 'Failed to add comment.');
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || data.error || 'Failed to add comment.');
       }
 
       await fetchComments();
