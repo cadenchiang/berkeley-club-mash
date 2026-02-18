@@ -46,19 +46,19 @@ export function Leaderboard({ clubs, loading }) {
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-      <table className="w-full">
+      <table className="w-full table-fixed">
         <thead className="bg-berkeley-blue text-white">
           <tr>
-            <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold w-12 sm:w-16">#</th>
+            <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold w-8 sm:w-16">#</th>
             <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold">Club</th>
-            <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold hidden sm:table-cell">Category</th>
-            <th className="px-2 sm:px-4 py-2 sm:py-3 text-center text-xs sm:text-sm font-semibold">
+            <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold hidden sm:table-cell w-28">Category</th>
+            <th className="px-2 sm:px-4 py-2 sm:py-3 text-center text-xs sm:text-sm font-semibold w-14 sm:w-20">
               <svg className="w-4 h-4 sm:w-5 sm:h-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/>
               </svg>
             </th>
-            <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold">Wins</th>
-            <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold hidden md:table-cell">Win Rate</th>
+            <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold w-14 sm:w-20">Wins</th>
+            <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-xs sm:text-sm font-semibold hidden md:table-cell w-24">Win Rate</th>
           </tr>
         </thead>
         <tbody>
@@ -87,7 +87,7 @@ export function Leaderboard({ clubs, loading }) {
                 <td className="px-2 sm:px-4 py-3 sm:py-4">
                   <Link
                     to={`/club/${club.id}`}
-                    className="flex items-center gap-2 sm:gap-3 font-medium text-gray-900 hover:text-berkeley-blue transition-colors"
+                    className="flex items-center gap-2 sm:gap-3 font-medium text-gray-900 hover:text-berkeley-blue transition-colors min-w-0"
                   >
                     {club.image_url ? (
                       <img
@@ -105,9 +105,9 @@ export function Leaderboard({ clubs, loading }) {
                         <span className="text-sm sm:text-lg">🏛️</span>
                       </div>
                     )}
-                    <span className="text-sm sm:text-base">{club.name}</span>
+                    <span className="text-sm sm:text-base truncate">{club.name}</span>
                     {(club.comment_count || 0) > 0 && (
-                      <span className="flex items-center gap-0.5 text-xs text-gray-300 ml-1">
+                      <span className="flex items-center gap-0.5 text-xs text-gray-300 flex-shrink-0">
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                         </svg>

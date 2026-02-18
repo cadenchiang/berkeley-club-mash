@@ -34,7 +34,7 @@ export function Rankings() {
                 onClick={() => setShowInfo(false)}
               />
               <div className={`
-                absolute left-0 top-8 z-50 w-72 bg-white border border-gray-200 rounded-lg shadow-lg p-4 text-sm
+                absolute left-0 top-8 z-50 w-[min(288px,calc(100vw-2rem))] bg-white border border-gray-200 rounded-lg shadow-lg p-4 text-sm
                 transition-all duration-200 origin-top-left
                 ${showInfo ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}
               `}>
