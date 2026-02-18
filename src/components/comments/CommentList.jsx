@@ -108,7 +108,7 @@ export function CommentList({ clubId }) {
           no comments yet
         </p>
       ) : (
-        <div className="divide-y divide-gray-100">
+        <div className="divide-y divide-gray-200 dark:divide-gray-700">
           {parentComments.map((comment) => (
             <div key={comment.id} className="py-3 first:pt-0">
               <CommentItem
