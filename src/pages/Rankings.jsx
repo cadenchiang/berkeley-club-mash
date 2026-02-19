@@ -14,7 +14,7 @@ export function Rankings() {
   const { clubs, loading, error, refetch } = useClubs({ category, search });
 
   return (
-    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-8 h-full overflow-auto">
+    <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-8 h-full overflow-y-auto overflow-x-hidden">
       <div className="mb-4 sm:mb-8 flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2 mb-1 sm:mb-2">

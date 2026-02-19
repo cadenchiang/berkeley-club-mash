@@ -77,9 +77,9 @@ export function Layout({ children }) {
   }, []);
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col overflow-x-hidden">
       <Header />
-      <main className="flex-1 flex items-center justify-center overflow-auto">
+      <main className="flex-1 flex items-center justify-center overflow-y-auto overflow-x-hidden">
         {children}
       </main>
       <Footer />
