@@ -1,6 +1,6 @@
 # clubmash
 
-head-to-head voting app that ranks berkeley student clubs with an elo rating system.
+head-to-head voting app that ranks berkeley student clubs with an elo rating system. my first ever project.
 
 **40,000+ votes in under 24 hours.**
 
